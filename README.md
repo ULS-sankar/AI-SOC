@@ -42,8 +42,10 @@ A practical cybersecurity portfolio project combining **network intrusion detect
 # 📊 SOC Dashboard
 
 ![AI-SOC Dashboard](docs/screenshots/dashboard.png)
+![AI-SOC Dashboard](docs/screenshots/chart.png)
+![AI-SOC Dashboard](docs/screenshots/alert.png)
 
-> 📸 Replace the image above with your actual dashboard screenshot.
+
 
 ---
 
@@ -111,6 +113,8 @@ The current prototype has been successfully tested against five controlled attac
 | 04 | ⚡ TCP SYN Flood | Network DoS | ✅ |
 | 05 | 📡 UDP Scan | Network Scanning | ✅ |
 
+![Detection](docs/screenshots/detector.png)
+
 ---
 
 # 🎯 MITRE ATT&CK Mapping
@@ -126,6 +130,7 @@ The current prototype has been successfully tested against five controlled attac
 # 🤖 AI Threat Analysis
 
 AI-SOC uses a locally hosted Qwen 2.5 3B model through Ollama to enrich security alerts.
+![AI-Anmalysis](docs/screenshots/ai-analysis.png)
 
 ```text
 Security Alert
