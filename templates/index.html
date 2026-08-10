@@ -2,835 +2,373 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-SOC Dashboard | Security Operations Center</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <title>AI-SOC Dashboard</title>
-
-
-    <!-- =====================================================
-         CSS
-    ====================================================== -->
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
-
-
-    <!-- =====================================================
-         CHART.JS
-    ====================================================== -->
-
+    <!-- CHART.JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
-
 
 <body>
 
-
 <!-- =========================================================
-     HEADER
+     TOP NAVIGATION BAR
 ========================================================= -->
-
-<header>
-
-    <h1>
-        🚀 AI-SOC Dashboard
-    </h1>
-
-    <p>
-        AI-Powered Security Operations Center
-    </p>
-
-</header>
-
-
-<hr>
-
-
-<!-- =========================================================
-     STATISTICS CARDS
-========================================================= -->
-
-<section class="cards">
-
-
-    <!-- TOTAL ALERTS -->
-
-    <!-- ========================================================= -->
-<!-- ATTACK STATISTICS CARDS -->
-<!-- ========================================================= -->
-
-<div class="cards">
-    <div class="card">
-    <h3>🔴 High Severity</h3>
-    <h1 id="high-count">0</h1>
-</div>
-
-<div class="card">
-    <h3>🟠 Medium Severity</h3>
-    <h1 id="medium-count">0</h1>
-</div>
-
-<div class="card">
-    <h3>🟢 Low Severity</h3>
-    <h1 id="low-count">0</h1>
-</div>
-
-    <!-- TOTAL ALERTS -->
-
-    <div class="card">
-
-        <h3>🚨 Total Alerts</h3>
-
-        <h1 id="total-alerts">
-             {{ total_alerts }}
-        </h1>
-
+<nav class="topbar">
+    <div class="brand">
+        <div class="brand-logo">🛡️</div>
+        <div class="brand-text">
+            <h1>AI-SOC</h1>
+            <p>AI-Powered Security Operations Center</p>
+        </div>
     </div>
 
-
-    <!-- PING FLOOD -->
-
-    <div class="card">
-
-        <h3>🌊 Ping Floods</h3>
-
-        <h1 id="ping-floods">
-            {{ ping_floods }}
-        </h1>
-
-    </div>
-
-
-    <!-- TCP SYN SCAN -->
-
-    <div class="card">
-
-        <h3>🔍 TCP SYN Scans</h3>
-
-        <h1 id="syn-scans">
-            {{ syn_scans }}
-        </h1>
-
-    </div>
-
-
-    <!-- TCP SYN FLOOD -->
-
-    <div class="card">
-
-        <h3>⚡ TCP SYN Floods</h3>
-
-        <h1 id="syn-floods">
-            {{ syn_floods }}
-        </h1>
-
-    </div>
-
-
-    <!-- ICMP SWEEP -->
-
-    <div class="card">
-
-        <h3>📡 ICMP Sweeps</h3>
-
-        <h1 id="icmp-sweeps">
-            {{ icmp_sweeps }}
-        </h1>
-
-    </div>
-
-
-    <!-- UDP SCAN -->
-
-    <div class="card">
-
-        <h3>🛰️ UDP Scans</h3>
-
-        <h1 id="udp-scans">
-            {{ udp_scans }}
-        </h1>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<br>
-
-
-<!-- =========================================================
-     ATTACK STATISTICS
-========================================================= -->
-
-<hr>
-
-<h2>
-    Attack Statistics
-</h2>
-
-
-<div class="chart-container">
-
-
-    <!-- =====================================================
-         PIE CHART
-    ====================================================== -->
-
-    <div class="chart-card">
-
-        <h3>
-            Attack Distribution
-        </h3>
-
-        <div class="chart-wrapper">
-
-            <canvas
-                id="attackChart"
-                data-ping="{{ ping_floods }}"
-                data-syn="{{ syn_scans }}"
-                data-synflood="{{ syn_floods }}"
-                data-icmp="{{ icmp_sweeps }}"
-                data-udp="{{ udp_scans }}">
-            </canvas>
-
+    <div class="topbar-actions">
+        <!-- LIVE STATUS -->
+        <div class="live-status">
+            <span class="live-dot">●</span>
+            <strong>LIVE MONITORING</strong>
+            <span class="live-sub">auto-updates every 3s</span>
         </div>
 
-    </div>
-
-
-    <!-- =====================================================
-         BAR CHART
-    ====================================================== -->
-
-    <div class="chart-card">
-
-        <h3>
-            Attack Count
-        </h3>
-
-        <div class="chart-wrapper">
-
-            <canvas
-                id="barChart">
-
-            </canvas>
-
-        </div>
-
-    </div>
-
-
-</div>
-
-
-<br>
-
-
-<!-- =========================================================
-     FILTER SECTION
-========================================================= -->
-
-<hr>
-
-<h2>
-    Filter Alerts
-</h2>
-
-
-<div class="filters">
-
-
-    <a href="/">
-        All
-    </a>
-
-
-    |
-
-    <a href="/?attack=Ping%20Flood">
-        Ping Flood
-    </a>
-
-
-    |
-
-    <a href="/?attack=TCP%20SYN%20Scan">
-        TCP SYN Scan
-    </a>
-
-
-    |
-
-    <a href="/?attack=UDP%20Scan">
-        UDP Scan
-    </a>
-
-
-    |
-
-    <a href="/?attack=ICMP%20Sweep">
-        ICMP Sweep
-    </a>
-
-
-    |
-
-    <a href="/?attack=TCP%20SYN%20Flood">
-        TCP SYN Flood
-    </a>
-
-
-</div>
-
-
-<br>
-
-
-<!-- =========================================================
-     IP SEARCH
-========================================================= -->
-
-<form method="GET"
-      action="/">
-
-    <input
-
-        type="text"
-
-        name="ip"
-
-        placeholder="Search by Source or Destination IP..."
-
-        value="{{ request.args.get('ip', '') }}"
-
-    >
-
-    <button type="submit">
-
-        🔎 Search
-
-    </button>
-
-</form>
-
-
-<br>
-
-
-<!-- =========================================================
-     LOG CONTROLS
-========================================================= -->
-
-<div class="log-controls">
-
-
-    <!-- CLEAR LOGS -->
-
-    <form
-        action="/clear"
-        method="POST"
-        style="display:inline;">
-
-        <button
-            type="submit"
-            onclick="return confirm('Are you sure you want to clear all alerts?');">
-
-            🗑 Clear Logs
-
-        </button>
-
-    </form>
-
-
-    <!-- DOWNLOAD LOGS -->
-
-    <button
-        onclick="window.location.href='/download'">
-
-        ⬇ Download Logs
-
-    </button>
-
-
-</div>
-
-
-<br>
-<br>
-
-
-<!-- =========================================================
-     LIVE STATUS
-========================================================= -->
-
-<div class="live-status">
-
-    <span class="live-dot">
-        ●
-    </span>
-
-    <strong>
-        LIVE MONITORING
-    </strong>
-
-    <span>
-        Dashboard automatically updates every 3 seconds
-    </span>
-
-</div>
-
-
-<br>
-
-
-<!-- =========================================================
-     SECURITY ALERT TABLE
-========================================================= -->
-
-<h2>
-    Security Alerts
-</h2>
-
-
-<div class="table-container">
-
-
-<table
-    border="1"
-    cellpadding="8"
-    cellspacing="0"
-    width="100%">
-
-
-    <!-- =====================================================
-         TABLE HEADER
-    ====================================================== -->
-
-    <thead>
-
-        <tr>
-
-            <th>
-                Time
-            </th>
-
-            <th>
-                Severity
-            </th>
-
-            <th>
-                Attack
-            </th>
-
-            <th>
-                Source IP
-            </th>
-
-            <th>
-                Destination IP
-            </th>
-
-            <th>
-                Source Port
-            </th>
-
-            <th>
-                Destination Port
-            </th>
-
-            <th>
-                AI Analysis
-            </th>
-
-            <th>
-                AI Analysis
-            </th>
-
-        </tr>
-
-    </thead>
-
-
-    <!-- =====================================================
-         TABLE BODY
-    ====================================================== -->
-
-    <tbody id="alerts-body">
-
-
-        {% for alert in alerts %}
-
-
-        <tr>
-
-
-            <!-- =================================================
-                 TIME
-            ================================================== -->
-
-            <td>
-
-                {{ alert[0] }}
-
-            </td>
-
-
-            <!-- =================================================
-                 SEVERITY
-            ================================================== -->
-
-            <td>
-
-
-                {% if alert[1] == "High" %}
-
-                    <span class="high">
-
-                        {{ alert[1] }}
-
-                    </span>
-
-
-                {% elif alert[1] == "Medium" %}
-
-                    <span class="medium">
-
-                        {{ alert[1] }}
-
-                    </span>
-
-
-                {% elif alert[1] == "Low" %}
-
-                    <span class="low">
-
-                        {{ alert[1] }}
-
-                    </span>
-
-
-                {% else %}
-
-                    {{ alert[1] }}
-
-                {% endif %}
-
-
-            </td>
-
-
-            <!-- =================================================
-                 ATTACK
-            ================================================== -->
-
-            <td>
-
-                {{ alert[2] }}
-
-            </td>
-
-
-            <!-- =================================================
-                 SOURCE IP
-            ================================================== -->
-
-            <td>
-
-                {{ alert[3] }}
-
-            </td>
-
-
-            <!-- =================================================
-                 DESTINATION IP
-            ================================================== -->
-
-            <td>
-
-                {{ alert[4] }}
-
-            </td>
-
-
-            <!-- =================================================
-                 SOURCE PORT
-            ================================================== -->
-
-            <td>
-
-                {{ alert[5] }}
-
-            </td>
-
-
-            <!-- =================================================
-                 DESTINATION PORT
-            ================================================== -->
-
-            <td>
-
-                {{ alert[6] }}
-
-            </td>
-
-
-            <!-- =================================================
-                 AI ANALYSIS BUTTON
-            ================================================== -->
-
-            <td>
-
-
-                <button
-
-                    class="ai-analyze-btn"
-
-                    data-alert='{{ alert|tojson|forceescape }}'>
-
-                    🤖 Analyze
-
+        <!-- LOG CONTROLS -->
+        <div class="log-controls">
+            <form action="/clear" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger"
+                    onclick="return confirm('Are you sure you want to clear all alerts?');">
+                    🗑 Clear Logs
                 </button>
-
-
-            </td>
-
-
-        </tr>
-
-
-        {% endfor %}
-
-
-    </tbody>
-
-
-</table>
-
-
-</div>
-
-
-<br>
-
-
-<!-- =========================================================
-     PAGINATION
-========================================================= -->
-
-<div class="pagination">
-
-
-    {% if page > 1 %}
-
-
-        <a
-            href="/?page={{ page - 1 }}{% if request.args.get('attack') %}&attack={{ request.args.get('attack') }}{% endif %}{% if request.args.get('ip') %}&ip={{ request.args.get('ip') }}{% endif %}">
-
-            ⬅ Previous
-
-        </a>
-
-
-    {% endif %}
-
-
-
-    <strong>
-
-        Page {{ page }}
-
-        of
-
-        {{ total_pages }}
-
-    </strong>
-
-
-
-    {% if page < total_pages %}
-
-
-        <a
-            href="/?page={{ page + 1 }}{% if request.args.get('attack') %}&attack={{ request.args.get('attack') }}{% endif %}{% if request.args.get('ip') %}&ip={{ request.args.get('ip') }}{% endif %}">
-
-            Next ➡
-
-        </a>
-
-
-    {% endif %}
-
-
-</div>
-
-
-<br>
-<br>
-
-
-<!-- =========================================================
-     AI ANALYSIS PANEL
-========================================================= -->
-
-<div
-    id="ai-analysis-container"
-
-    class="ai-analysis-container"
-
-    style="display:none;">
-
-
-    <hr>
-
-
-    <h2>
-
-        🤖 AI Threat Analysis
-
-    </h2>
-
-
-
-    <!-- =====================================================
-         THREAT SUMMARY
-    ====================================================== -->
-
-    <div class="ai-section">
-
-
-        <h3>
-
-            Threat Summary
-
-        </h3>
-
-
-        <p id="ai-threat-summary">
-
-            Waiting for analysis...
-
-        </p>
-
-
+            </form>
+            <button class="btn btn-outline" onclick="window.location.href='/download'">
+                ⬇ Download Logs
+            </button>
+        </div>
     </div>
+</nav>
 
+<main class="container">
 
+    <!-- =========================================================
+         HERO / SUMMARY BANNER
+    ========================================================== -->
+    <section class="hero">
+        <div>
+            <h2>Security Dashboard</h2>
+            <p>Real-time threat detection, attack statistics, and AI-powered analysis.</p>
+        </div>
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Systems Operational
+        </div>
+    </section>
 
-    <!-- =====================================================
-         WHY IT MATTERS
-    ====================================================== -->
+    <!-- =========================================================
+         STATISTICS / ATTACK CARDS
+    ========================================================== -->
+    <section class="stats-section">
 
-    <div class="ai-section">
+        <div class="card card-hero">
+            <div class="card-icon">🚨</div>
+            <div class="card-content">
+                <h3>Total Alerts</h3>
+                <h1 id="total-alerts">{{ total_alerts }}</h1>
+                <span class="card-label">All detected threats</span>
+            </div>
+        </div>
 
+        <div class="card card-high">
+            <div class="card-icon">🔴</div>
+            <div class="card-content">
+                <h3>High Severity</h3>
+                <h1 id="high-count">0</h1>
+                <span class="card-label">Critical threats</span>
+            </div>
+        </div>
 
-        <h3>
+        <div class="card card-medium">
+            <div class="card-icon">🟠</div>
+            <div class="card-content">
+                <h3>Medium Severity</h3>
+                <h1 id="medium-count">0</h1>
+                <span class="card-label">Elevated threats</span>
+            </div>
+        </div>
 
-            Why It Matters
+        <div class="card card-low">
+            <div class="card-icon">🟢</div>
+            <div class="card-content">
+                <h3>Low Severity</h3>
+                <h1 id="low-count">0</h1>
+                <span class="card-label">Low-risk threats</span>
+            </div>
+        </div>
 
-        </h3>
+        <div class="card card-attack">
+            <div class="card-icon">🌊</div>
+            <div class="card-content">
+                <h3>Ping Floods</h3>
+                <h1 id="ping-floods">{{ ping_floods }}</h1>
+                <span class="card-label">DoS flood</span>
+            </div>
+        </div>
 
+        <div class="card card-attack">
+            <div class="card-icon">🔍</div>
+            <div class="card-content">
+                <h3>TCP SYN Scans</h3>
+                <h1 id="syn-scans">{{ syn_scans }}</h1>
+                <span class="card-label">Port scan</span>
+            </div>
+        </div>
 
-        <p id="ai-why-matters">
+        <div class="card card-attack">
+            <div class="card-icon">⚡</div>
+            <div class="card-content">
+                <h3>TCP SYN Floods</h3>
+                <h1 id="syn-floods">{{ syn_floods }}</h1>
+                <span class="card-label">DoS flood</span>
+            </div>
+        </div>
 
-        </p>
+        <div class="card card-attack">
+            <div class="card-icon">📡</div>
+            <div class="card-content">
+                <h3>ICMP Sweeps</h3>
+                <h1 id="icmp-sweeps">{{ icmp_sweeps }}</h1>
+                <span class="card-label">Network discovery</span>
+            </div>
+        </div>
 
+        <div class="card card-attack">
+            <div class="card-icon">🛰️</div>
+            <div class="card-content">
+                <h3>UDP Scans</h3>
+                <h1 id="udp-scans">{{ udp_scans }}</h1>
+                <span class="card-label">Port scan</span>
+            </div>
+        </div>
 
-    </div>
+    </section>
 
+    <!-- =========================================================
+         ATTACK STATISTICS / CHARTS
+    ========================================================== -->
+    <section class="section-block">
+        <div class="section-header">
+            <h2>Attack Statistics</h2>
+            <p>Visual breakdown of detected attack types</p>
+        </div>
 
+        <div class="chart-container">
 
-    <!-- =====================================================
-         MITRE ATT&CK
-    ====================================================== -->
+            <!-- PIE CHART -->
+            <div class="chart-card">
+                <h3>Attack Distribution</h3>
+                <div class="chart-wrapper">
+                    <canvas
+                        id="attackChart"
+                        data-ping="{{ ping_floods }}"
+                        data-syn="{{ syn_scans }}"
+                        data-synflood="{{ syn_floods }}"
+                        data-icmp="{{ icmp_sweeps }}"
+                        data-udp="{{ udp_scans }}">
+                    </canvas>
+                </div>
+            </div>
 
-    <div class="ai-section">
+            <!-- BAR CHART -->
+            <div class="chart-card">
+                <h3>Attack Count</h3>
+                <div class="chart-wrapper">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
 
+        </div>
+    </section>
 
-        <h3>
+    <!-- =========================================================
+         FILTER + SEARCH TOOLBAR
+    ========================================================== -->
+    <section class="section-block">
+        <div class="section-header">
+            <h2>Filter Alerts</h2>
+            <p>Narrow down alerts by attack type or IP address</p>
+        </div>
 
-            MITRE ATT&CK
+        <div class="toolbar">
+            <div class="filters">
+                <span class="filter-label">Attack Type:</span>
+                <a href="/" class="filter-chip active">All</a>
+                <a href="/?attack=Ping%20Flood" class="filter-chip">Ping Flood</a>
+                <a href="/?attack=TCP%20SYN%20Scan" class="filter-chip">TCP SYN Scan</a>
+                <a href="/?attack=UDP%20Scan" class="filter-chip">UDP Scan</a>
+                <a href="/?attack=ICMP%20Sweep" class="filter-chip">ICMP Sweep</a>
+                <a href="/?attack=TCP%20SYN%20Flood" class="filter-chip">TCP SYN Flood</a>
+            </div>
 
-        </h3>
+            <form method="GET" action="/" class="search-form">
+                <input
+                    type="text"
+                    name="ip"
+                    placeholder="Search by Source or Destination IP..."
+                    value="{{ request.args.get('ip', '') }}"
+                >
+                <button type="submit" class="btn btn-primary">🔎 Search</button>
+            </form>
+        </div>
+    </section>
 
+    <!-- =========================================================
+         SECURITY ALERTS TABLE
+    ========================================================== -->
+    <section class="section-block">
+        <div class="section-header">
+            <h2>Security Alerts</h2>
+            <p>Most recent threats detected across the network</p>
+        </div>
 
-        <p id="ai-mitre">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Severity</th>
+                        <th>Attack</th>
+                        <th>Source IP</th>
+                        <th>Destination IP</th>
+                        <th>Source Port</th>
+                        <th>Destination Port</th>
+                        <th>MITRE ATT&CK</th>
+                        <th>AI Analysis</th>
+                    </tr>
+                </thead>
+                <tbody id="alerts-body">
+                    {% for alert in alerts %}
+                    <tr>
+                        <td class="cell-time">{{ alert[0] }}</td>
 
-        </p>
+                        <td>
+                            {% if alert[1] == "High" %}
+                                <span class="severity severity-high">{{ alert[1] }}</span>
+                            {% elif alert[1] == "Medium" %}
+                                <span class="severity severity-medium">{{ alert[1] }}</span>
+                            {% elif alert[1] == "Low" %}
+                                <span class="severity severity-low">{{ alert[1] }}</span>
+                            {% else %}
+                                {{ alert[1] }}
+                            {% endif %}
+                        </td>
 
+                        <td class="cell-attack">{{ alert[2] }}</td>
+                        <td class="cell-ip">{{ alert[3] }}</td>
+                        <td class="cell-ip">{{ alert[4] }}</td>
+                        <td class="cell-port">{{ alert[5] }}</td>
+                        <td class="cell-port">{{ alert[6] }}</td>
 
-    </div>
+                        <td class="cell-mitre">
+                            {% if alert[2] in ["Ping Flood", "TCP SYN Flood"] %}
+                                <span class="mitre-badge">T1498.001 · DoS Flood</span>
+                            {% elif alert[2] in ["ICMP Sweep", "TCP SYN Scan", "UDP Scan"] %}
+                                <span class="mitre-badge">T1046 · Service Discovery</span>
+                            {% else %}
+                                <span class="mitre-na">—</span>
+                            {% endif %}
+                        </td>
 
+                        <td class="cell-ai">
+                            <button
+                                class="ai-analyze-btn"
+                                data-alert='{{ alert|tojson|forceescape }}'>
+                                🤖 Analyze
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
+        <!-- PAGINATION -->
+        <div class="pagination">
+            {% if page > 1 %}
+                <a class="page-link"
+                   href="/?page={{ page - 1 }}{% if request.args.get('attack') %}&attack={{ request.args.get('attack') }}{% endif %}{% if request.args.get('ip') %}&ip={{ request.args.get('ip') }}{% endif %}">
+                    ⬅ Previous
+                </a>
+            {% endif %}
 
-    <!-- =====================================================
-         RECOMMENDED ACTIONS
-    ====================================================== -->
+            <span class="page-info">
+                Page <strong>{{ page }}</strong> of <strong>{{ total_pages }}</strong>
+            </span>
 
-    <div class="ai-section">
+            {% if page < total_pages %}
+                <a class="page-link"
+                   href="/?page={{ page + 1 }}{% if request.args.get('attack') %}&attack={{ request.args.get('attack') }}{% endif %}{% if request.args.get('ip') %}&ip={{ request.args.get('ip') }}{% endif %}">
+                    Next ➡
+                </a>
+            {% endif %}
+        </div>
+    </section>
 
+    <!-- =========================================================
+         AI ANALYSIS PANEL
+    ========================================================== -->
+    <section
+        id="ai-analysis-container"
+        class="ai-analysis-container"
+        style="display:none;">
 
-        <h3>
+        <div class="ai-header">
+            <h2>🤖 AI Threat Analysis</h2>
+            <p>Automated reasoning powered by Qwen AI</p>
+        </div>
 
-            Recommended Actions
+        <div class="ai-grid">
+            <div class="ai-section">
+                <h3>Threat Summary</h3>
+                <p id="ai-threat-summary">Waiting for analysis...</p>
+            </div>
 
-        </h3>
+            <div class="ai-section">
+                <h3>Why It Matters</h3>
+                <p id="ai-why-matters"></p>
+            </div>
 
+            <div class="ai-section">
+                <h3>MITRE ATT&CK</h3>
+                <p id="ai-mitre"></p>
+            </div>
 
-        <ul id="ai-actions">
+            <div class="ai-section">
+                <h3>Recommended Actions</h3>
+                <ul id="ai-actions"></ul>
+            </div>
+        </div>
+    </section>
 
-        </ul>
-
-
-    </div>
-
-
-</div>
-
-
-<br>
-
+</main>
 
 <!-- =========================================================
      FOOTER
 ========================================================= -->
-
-<hr>
-
-
 <footer>
-
-    <p>
-
-        AI-SOC Detection & Response System
-
-    </p>
-
-    <p>
-
-        Network Monitoring • Threat Detection • AI Analysis
-
-    </p>
-
+    <div class="footer-brand">
+        <span class="footer-logo">🛡️</span>
+        <p>AI-SOC Detection & Response System</p>
+    </div>
+    <p class="footer-tags">Network Monitoring • Threat Detection • AI Analysis</p>
+    <p class="footer-copy">© {{ current_year if current_year else 2026 }} AI-SOC. All rights reserved.</p>
 </footer>
-
-
 
 <!-- =========================================================
      DASHBOARD JAVASCRIPT
 ========================================================= -->
-
-<script
-    src="{{ url_for('static', filename='js/dashboard.js') }}">
-</script>
-
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 
 </body>
-
 </html>

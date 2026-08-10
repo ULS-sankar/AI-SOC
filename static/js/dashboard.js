@@ -696,6 +696,9 @@ function updateAlertTable(alerts) {
                     "td"
                 );
 
+            timeCell.className =
+                "cell-time";
+
             timeCell.innerText =
                 data[0];
 
@@ -760,6 +763,8 @@ function updateAlertTable(alerts) {
                     "td"
                 );
 
+            attackCell.className =
+                "cell-attack";
 
             attackCell.innerText =
                 data[2];
@@ -774,6 +779,8 @@ function updateAlertTable(alerts) {
                     "td"
                 );
 
+            sourceCell.className =
+                "cell-ip";
 
             sourceCell.innerText =
                 data[3];
@@ -788,6 +795,8 @@ function updateAlertTable(alerts) {
                     "td"
                 );
 
+            destinationCell.className =
+                "cell-ip";
 
             destinationCell.innerText =
                 data[4];
@@ -802,6 +811,8 @@ function updateAlertTable(alerts) {
                     "td"
                 );
 
+            sourcePortCell.className =
+                "cell-port";
 
             sourcePortCell.innerText =
                 data[5];
@@ -816,6 +827,8 @@ function updateAlertTable(alerts) {
                     "td"
                 );
 
+            destinationPortCell.className =
+                "cell-port";
 
             destinationPortCell.innerText =
                 data[6];
@@ -829,6 +842,9 @@ function updateAlertTable(alerts) {
                 document.createElement(
                     "td"
                 );
+
+            aiCell.className =
+                "cell-ai";
 
 
             const aiButton =
@@ -871,6 +887,9 @@ function updateAlertTable(alerts) {
                     "td"
                 );
 
+            mitreCell.className =
+                "cell-mitre";
+
 
             const mitreTechnique =
                 normalized.mitre_technique;
@@ -885,17 +904,29 @@ function updateAlertTable(alerts) {
                 mitreTechnique !== "N/A"
             ) {
 
-                mitreCell.innerText =
+                const mitreBadge =
+                    document.createElement(
+                        "span"
+                    );
+
+                mitreBadge.className =
+                    "mitre-badge";
+
+                mitreBadge.innerText =
                     mitreTechnique +
-                    " - " +
+                    " · " +
                     mitreName;
+
+                mitreCell.appendChild(
+                    mitreBadge
+                );
 
             }
 
             else {
 
                 mitreCell.innerText =
-                    "N/A";
+                    "—";
 
             }
 
