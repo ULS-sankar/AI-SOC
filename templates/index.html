@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI-SOC Dashboard</title>
+
+
+    <!-- =====================================================
+         CSS
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+
+    <!-- =====================================================
+         CHART.JS
+    ====================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+    <h1>
+        🚀 AI-SOC Dashboard
+    </h1>
+
+    <p>
+        AI-Powered Security Operations Center
+    </p>
+
+</header>
+
+
+<hr>
+
+
+<!-- =========================================================
+     STATISTICS CARDS
+========================================================= -->
+
+<section class="cards">
+
+
+    <!-- TOTAL ALERTS -->
+
+    <!-- ========================================================= -->
+<!-- ATTACK STATISTICS CARDS -->
+<!-- ========================================================= -->
+
+<div class="cards">
+    <div class="card">
+    <h3>🔴 High Severity</h3>
+    <h1 id="high-count">0</h1>
+</div>
+
+<div class="card">
+    <h3>🟠 Medium Severity</h3>
+    <h1 id="medium-count">0</h1>
+</div>
+
+<div class="card">
+    <h3>🟢 Low Severity</h3>
+    <h1 id="low-count">0</h1>
+</div>
+
+    <!-- TOTAL ALERTS -->
+
+    <div class="card">
+
+        <h3>🚨 Total Alerts</h3>
+
+        <h1 id="total-alerts">
+             {{ total_alerts }}
+        </h1>
+
+    </div>
+
+
+    <!-- PING FLOOD -->
+
+    <div class="card">
+
+        <h3>🌊 Ping Floods</h3>
+
+        <h1 id="ping-floods">
+            {{ ping_floods }}
+        </h1>
+
+    </div>
+
+
+    <!-- TCP SYN SCAN -->
+
+    <div class="card">
+
+        <h3>🔍 TCP SYN Scans</h3>
+
+        <h1 id="syn-scans">
+            {{ syn_scans }}
+        </h1>
+
+    </div>
+
+
+    <!-- TCP SYN FLOOD -->
+
+    <div class="card">
+
+        <h3>⚡ TCP SYN Floods</h3>
+
+        <h1 id="syn-floods">
+            {{ syn_floods }}
+        </h1>
+
+    </div>
+
+
+    <!-- ICMP SWEEP -->
+
+    <div class="card">
+
+        <h3>📡 ICMP Sweeps</h3>
+
+        <h1 id="icmp-sweeps">
+            {{ icmp_sweeps }}
+        </h1>
+
+    </div>
+
+
+    <!-- UDP SCAN -->
+
+    <div class="card">
+
+        <h3>🛰️ UDP Scans</h3>
+
+        <h1 id="udp-scans">
+            {{ udp_scans }}
+        </h1>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<br>
+
+
+<!-- =========================================================
+     ATTACK STATISTICS
+========================================================= -->
+
+<hr>
+
+<h2>
+    Attack Statistics
+</h2>
+
+
+<div class="chart-container">
+
+
+    <!-- =====================================================
+         PIE CHART
+    ====================================================== -->
+
+    <div class="chart-card">
+
+        <h3>
+            Attack Distribution
+        </h3>
+
+        <div class="chart-wrapper">
+
+            <canvas
+                id="attackChart"
+                data-ping="{{ ping_floods }}"
+                data-syn="{{ syn_scans }}"
+                data-synflood="{{ syn_floods }}"
+                data-icmp="{{ icmp_sweeps }}"
+                data-udp="{{ udp_scans }}">
+            </canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BAR CHART
+    ====================================================== -->
+
+    <div class="chart-card">
+
+        <h3>
+            Attack Count
+        </h3>
+
+        <div class="chart-wrapper">
+
+            <canvas
+                id="barChart">
+
+            </canvas>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<br>
+
+
+<!-- =========================================================
+     FILTER SECTION
+========================================================= -->
+
+<hr>
+
+<h2>
+    Filter Alerts
+</h2>
+
+
+<div class="filters">
+
+
+    <a href="/">
+        All
+    </a>
+
+
+    |
+
+    <a href="/?attack=Ping%20Flood">
+        Ping Flood
+    </a>
+
+
+    |
+
+    <a href="/?attack=TCP%20SYN%20Scan">
+        TCP SYN Scan
+    </a>
+
+
+    |
+
+    <a href="/?attack=UDP%20Scan">
+        UDP Scan
+    </a>
+
+
+    |
+
+    <a href="/?attack=ICMP%20Sweep">
+        ICMP Sweep
+    </a>
+
+
+    |
+
+    <a href="/?attack=TCP%20SYN%20Flood">
+        TCP SYN Flood
+    </a>
+
+
+</div>
+
+
+<br>
+
+
+<!-- =========================================================
+     IP SEARCH
+========================================================= -->
+
+<form method="GET"
+      action="/">
+
+    <input
+
+        type="text"
+
+        name="ip"
+
+        placeholder="Search by Source or Destination IP..."
+
+        value="{{ request.args.get('ip', '') }}"
+
+    >
+
+    <button type="submit">
+
+        🔎 Search
+
+    </button>
+
+</form>
+
+
+<br>
+
+
+<!-- =========================================================
+     LOG CONTROLS
+========================================================= -->
+
+<div class="log-controls">
+
+
+    <!-- CLEAR LOGS -->
+
+    <form
+        action="/clear"
+        method="POST"
+        style="display:inline;">
+
+        <button
+            type="submit"
+            onclick="return confirm('Are you sure you want to clear all alerts?');">
+
+            🗑 Clear Logs
+
+        </button>
+
+    </form>
+
+
+    <!-- DOWNLOAD LOGS -->
+
+    <button
+        onclick="window.location.href='/download'">
+
+        ⬇ Download Logs
+
+    </button>
+
+
+</div>
+
+
+<br>
+<br>
+
+
+<!-- =========================================================
+     LIVE STATUS
+========================================================= -->
+
+<div class="live-status">
+
+    <span class="live-dot">
+        ●
+    </span>
+
+    <strong>
+        LIVE MONITORING
+    </strong>
+
+    <span>
+        Dashboard automatically updates every 3 seconds
+    </span>
+
+</div>
+
+
+<br>
+
+
+<!-- =========================================================
+     SECURITY ALERT TABLE
+========================================================= -->
+
+<h2>
+    Security Alerts
+</h2>
+
+
+<div class="table-container">
+
+
+<table
+    border="1"
+    cellpadding="8"
+    cellspacing="0"
+    width="100%">
+
+
+    <!-- =====================================================
+         TABLE HEADER
+    ====================================================== -->
+
+    <thead>
+
+        <tr>
+
+            <th>
+                Time
+            </th>
+
+            <th>
+                Severity
+            </th>
+
+            <th>
+                Attack
+            </th>
+
+            <th>
+                Source IP
+            </th>
+
+            <th>
+                Destination IP
+            </th>
+
+            <th>
+                Source Port
+            </th>
+
+            <th>
+                Destination Port
+            </th>
+
+            <th>
+                AI Analysis
+            </th>
+
+            <th>
+                AI Analysis
+            </th>
+
+        </tr>
+
+    </thead>
+
+
+    <!-- =====================================================
+         TABLE BODY
+    ====================================================== -->
+
+    <tbody id="alerts-body">
+
+
+        {% for alert in alerts %}
+
+
+        <tr>
+
+
+            <!-- =================================================
+                 TIME
+            ================================================== -->
+
+            <td>
+
+                {{ alert[0] }}
+
+            </td>
+
+
+            <!-- =================================================
+                 SEVERITY
+            ================================================== -->
+
+            <td>
+
+
+                {% if alert[1] == "High" %}
+
+                    <span class="high">
+
+                        {{ alert[1] }}
+
+                    </span>
+
+
+                {% elif alert[1] == "Medium" %}
+
+                    <span class="medium">
+
+                        {{ alert[1] }}
+
+                    </span>
+
+
+                {% elif alert[1] == "Low" %}
+
+                    <span class="low">
+
+                        {{ alert[1] }}
+
+                    </span>
+
+
+                {% else %}
+
+                    {{ alert[1] }}
+
+                {% endif %}
+
+
+            </td>
+
+
+            <!-- =================================================
+                 ATTACK
+            ================================================== -->
+
+            <td>
+
+                {{ alert[2] }}
+
+            </td>
+
+
+            <!-- =================================================
+                 SOURCE IP
+            ================================================== -->
+
+            <td>
+
+                {{ alert[3] }}
+
+            </td>
+
+
+            <!-- =================================================
+                 DESTINATION IP
+            ================================================== -->
+
+            <td>
+
+                {{ alert[4] }}
+
+            </td>
+
+
+            <!-- =================================================
+                 SOURCE PORT
+            ================================================== -->
+
+            <td>
+
+                {{ alert[5] }}
+
+            </td>
+
+
+            <!-- =================================================
+                 DESTINATION PORT
+            ================================================== -->
+
+            <td>
+
+                {{ alert[6] }}
+
+            </td>
+
+
+            <!-- =================================================
+                 AI ANALYSIS BUTTON
+            ================================================== -->
+
+            <td>
+
+
+                <button
+
+                    class="ai-analyze-btn"
+
+                    data-alert='{{ alert|tojson|forceescape }}'>
+
+                    🤖 Analyze
+
+                </button>
+
+
+            </td>
+
+
+        </tr>
+
+
+        {% endfor %}
+
+
+    </tbody>
+
+
+</table>
+
+
+</div>
+
+
+<br>
+
+
+<!-- =========================================================
+     PAGINATION
+========================================================= -->
+
+<div class="pagination">
+
+
+    {% if page > 1 %}
+
+
+        <a
+            href="/?page={{ page - 1 }}{% if request.args.get('attack') %}&attack={{ request.args.get('attack') }}{% endif %}{% if request.args.get('ip') %}&ip={{ request.args.get('ip') }}{% endif %}">
+
+            ⬅ Previous
+
+        </a>
+
+
+    {% endif %}
+
+
+
+    <strong>
+
+        Page {{ page }}
+
+        of
+
+        {{ total_pages }}
+
+    </strong>
+
+
+
+    {% if page < total_pages %}
+
+
+        <a
+            href="/?page={{ page + 1 }}{% if request.args.get('attack') %}&attack={{ request.args.get('attack') }}{% endif %}{% if request.args.get('ip') %}&ip={{ request.args.get('ip') }}{% endif %}">
+
+            Next ➡
+
+        </a>
+
+
+    {% endif %}
+
+
+</div>
+
+
+<br>
+<br>
+
+
+<!-- =========================================================
+     AI ANALYSIS PANEL
+========================================================= -->
+
+<div
+    id="ai-analysis-container"
+
+    class="ai-analysis-container"
+
+    style="display:none;">
+
+
+    <hr>
+
+
+    <h2>
+
+        🤖 AI Threat Analysis
+
+    </h2>
+
+
+
+    <!-- =====================================================
+         THREAT SUMMARY
+    ====================================================== -->
+
+    <div class="ai-section">
+
+
+        <h3>
+
+            Threat Summary
+
+        </h3>
+
+
+        <p id="ai-threat-summary">
+
+            Waiting for analysis...
+
+        </p>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         WHY IT MATTERS
+    ====================================================== -->
+
+    <div class="ai-section">
+
+
+        <h3>
+
+            Why It Matters
+
+        </h3>
+
+
+        <p id="ai-why-matters">
+
+        </p>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MITRE ATT&CK
+    ====================================================== -->
+
+    <div class="ai-section">
+
+
+        <h3>
+
+            MITRE ATT&CK
+
+        </h3>
+
+
+        <p id="ai-mitre">
+
+        </p>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         RECOMMENDED ACTIONS
+    ====================================================== -->
+
+    <div class="ai-section">
+
+
+        <h3>
+
+            Recommended Actions
+
+        </h3>
+
+
+        <ul id="ai-actions">
+
+        </ul>
+
+
+    </div>
+
+
+</div>
+
+
+<br>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<hr>
+
+
+<footer>
+
+    <p>
+
+        AI-SOC Detection & Response System
+
+    </p>
+
+    <p>
+
+        Network Monitoring • Threat Detection • AI Analysis
+
+    </p>
+
+</footer>
+
+
+
+<!-- =========================================================
+     DASHBOARD JAVASCRIPT
+========================================================= -->
+
+<script
+    src="{{ url_for('static', filename='js/dashboard.js') }}">
+</script>
+
+
+</body>
+
+</html>
