@@ -2,18 +2,18 @@
 🛡️ AI-SOC
 AI-Powered Security Operations Center
 A lightweight, local cybersecurity monitoring platform for network attack detection, MITRE ATT&CK mapping, AI-assisted threat analysis, and SOC visualization.
-![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-3.x-000000?style=for-the-badge&logo=flask&logoColor=white)
-![Scapy](https://img.shields.io/badge/Scapy-Network%20Detection-1f6feb?style=for-the-badge)
-![Ollama](https://img.shields.io/badge/Ollama-Local%20AI-black?style=for-the-badge)
-![Qwen](https://img.shields.io/badge/Qwen-2.5--3B-purple?style=for-the-badge)
-![MITRE ATT&CK](https://img.shields.io/badge/MITRE-ATT%26CK-red?style=for-the-badge)
+![Python](https://www.python.org/)
+![Flask](https://flask.palletsprojects.com/)
+![Scapy](https://scapy.net/)
+![Ollama](https://ollama.com/)
+![Qwen](https://qwenlm.github.io/)
+![MITRE ATT&CK](https://attack.mitre.org/)
 </div>
 ---
 👋 About the Project
 AI-SOC is a practical cybersecurity project that demonstrates how a small Security Operations Center can be built using open-source technologies.
 The system monitors network traffic, detects predefined attack patterns, generates structured alerts, maps selected detections to MITRE ATT&CK, sends alerts to a locally hosted Qwen 2.5 3B model through Ollama, and presents the results through a Flask-based SOC dashboard.
-> 🎯 **Project goal:** Build an understandable end-to-end SOC pipeline rather than a black-box security tool.
+> 🎯 \*\*Project goal:\*\* Build an understandable end-to-end SOC pipeline rather than a black-box security tool.
 ---
 🚀 What AI-SOC Can Do
 Capability	Description
@@ -60,7 +60,7 @@ Capability	Description
                      ▼                   ▼
               ┌──────────────┐   ┌───────────────┐
               │ alerts.log   │   │ AI Analyzer   │
-              │              │   │ ai_analyzer.py│
+              │              │   │ ai\_analyzer.py│
               └──────┬───────┘   └───────┬───────┘
                      │                   │
                      │                   ▼
@@ -89,7 +89,7 @@ AI-SOC/
 │
 ├── detector.py              # Network packet detection engine
 ├── logger.py                # Security alert logger
-├── ai_analyzer.py           # Local AI threat analysis
+├── ai\_analyzer.py           # Local AI threat analysis
 ├── dashboard.py             # Flask web application
 ├── config.py                # Project configuration
 │
@@ -102,7 +102,7 @@ AI-SOC/
 │
 ├── logs/
 │   ├── alerts.log            # Generated security alerts
-│   └── ai_analysis.json      # AI analysis data
+│   └── ai\_analysis.json      # AI analysis data
 │
 ├── requirements.txt
 ├── README.md
@@ -124,37 +124,37 @@ Attack	Technique	MITRE Name
 ICMP Sweep	`T1046`	Network Service Discovery
 Ping Flood	`T1498.001`	Network Denial of Service: Direct Network Flood
 TCP SYN Flood	`T1498.001`	Network Denial of Service: Direct Network Flood
-> Additional ATT&CK mappings can be added as new detection rules are implemented.
+> Additional ATT\&CK mappings can be added as new detection rules are implemented.
 ---
 🖥️ Project Screenshots
 The following section is intentionally structured so screenshots can be added directly to the repository.
 01 — Main SOC Dashboard
-> 📸 **Add screenshot:** `docs/screenshots/dashboard.png`
+> 📸 \*\*Add screenshot:\*\* `docs/screenshots/dashboard.png`
 ![AI-SOC Dashboard](docs/screenshots/dashboard.png)
 Show the main dashboard with statistics, attack charts and the alert table.
 ---
 02 — Live Security Alerts
-> 📸 **Add screenshot:** `docs/screenshots/alerts.png`
+> 📸 \*\*Add screenshot:\*\* `docs/screenshots/alerts.png`
 ![Security Alerts](docs/screenshots/alerts.png)
 Show detected attacks appearing in the SOC alert table.
 ---
 03 — AI Threat Analysis
-> 📸 **Add screenshot:** `docs/screenshots/ai-analysis.png`
+> 📸 \*\*Add screenshot:\*\* `docs/screenshots/ai-analysis.png`
 ![AI Threat Analysis](docs/screenshots/ai-analysis.png)
 Show the Qwen-generated threat summary, MITRE technique and recommended actions.
 ---
 04 — Detection Engine
-> 📸 **Add screenshot:** `docs/screenshots/detection-engine.png`
+> 📸 \*\*Add screenshot:\*\* `docs/screenshots/detection-engine.png`
 ![Detection Engine](docs/screenshots/detection-engine.png)
 Show `detector.py` running and detecting an attack from Kali Linux.
 ---
 05 — Network Testing
-> 📸 **Add screenshot:** `docs/screenshots/network-test.png`
+> 📸 \*\*Add screenshot:\*\* `docs/screenshots/network-test.png`
 ![Network Testing](docs/screenshots/network-test.png)
 Show Kali Linux generating controlled test traffic and the Ubuntu sensor receiving it.
 ---
 06 — Packet Capture Verification
-> 📸 **Add screenshot:** `docs/screenshots/tcpdump.png`
+> 📸 \*\*Add screenshot:\*\* `docs/screenshots/tcpdump.png`
 ![Packet Capture](docs/screenshots/tcpdump.png)
 Show `tcpdump` confirming packets are arriving on the monitoring interface.
 ---
@@ -166,7 +166,7 @@ Security Alert
       ↓
 Flask /api/analyze
       ↓
-ai_analyzer.py
+ai\_analyzer.py
       ↓
 Ollama
       ↓
@@ -255,18 +255,18 @@ The analyzer should be able to reach the Ollama API before AI analysis is tested
 ▶️ Running AI-SOC
 Start the Detection Engine
 ```bash
-cd ~/ai-soc
+cd \~/ai-soc
 sudo venv/bin/python detector.py
 ```
 Start the AI Analyzer
 ```bash
-cd ~/ai-soc
+cd \~/ai-soc
 source venv/bin/activate
-python3 ai_analyzer.py
+python3 ai\_analyzer.py
 ```
 Start the Dashboard
 ```bash
-cd ~/ai-soc
+cd \~/ai-soc
 source venv/bin/activate
 python3 dashboard.py
 ```
@@ -310,7 +310,7 @@ Use these only against the isolated test environment or systems for which explic
              ↓
 6. alerts.log stores the event
              ↓
-7. ai_analyzer.py processes alert
+7. ai\_analyzer.py processes alert
              ↓
 8. Qwen 2.5 3B analyzes threat
              ↓
